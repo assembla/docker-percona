@@ -9,11 +9,12 @@ RUN \
     apt-get install percona-server-server-5.6 percona-server-client-5.6 -y && \
     apt-get clean
 
-ADD ./my.cnf /etc/mysql/my.cnf
-ADD ./set-access-rights.sh /tmp/set-access-rights.sh
-RUN /bin/sh /tmp/set-access-rights.sh
+ADD ./my.cnf /etc/mysql/
+ADD ./run.sh /
 
 EXPOSE 3306
 VOLUME ["/var/lib/mysql"]
+ENTRYPOINT ["/run.sh"]
 
-CMD ["/usr/sbin/mysqld", "--user=root"]
+EXPOSE 3306
+CMD ["mysqld", "--datadir=/var/lib/mysql", "--user=mysql"]
